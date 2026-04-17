@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banco de Músicas Autorais</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(255, 0, 150, 0.18), transparent 25%),
+        radial-gradient(circle at top right, rgba(0, 200, 255, 0.18), transparent 25%),
+        linear-gradient(135deg, #0d0d0d, #111827, #1f2937);
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    header {
+      padding: 60px 20px 30px;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(10px);
+      font-size: 14px;
+      color: #d1d5db;
+      margin-bottom: 18px;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 15px;
+      background: linear-gradient(90deg, #ffffff, #d1d5db, #8be9fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      max-width: 850px;
+      margin: 0 auto;
+      color: #cbd5e1;
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .top-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .top-buttons a {
+      text-decoration: none;
+      color: white;
+      padding: 14px 24px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.05));
+      border: 1px solid rgba(255,255,255,0.12);
+      transition: 0.3s ease;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .top-buttons a:hover {
+      transform: translateY(-3px) scale(1.02);
+      background: linear-gradient(135deg, rgba(139,233,253,0.18), rgba(255,255,255,0.08));
+    }
+
+    main {
+      max-width: 1250px;
+      margin: 40px auto 80px;
+      padding: 0 20px;
+    }
+
+    .artist-section {
+      margin-bottom: 50px;
+      scroll-margin-top: 30px;
+    }
+
+    .artist-box {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 28px;
+      padding: 28px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
+
+    .artist-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 24px;
+    }
+
+    .artist-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .artist-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .artist-title h2 {
+      font-size: 1.8rem;
+      margin-bottom: 4px;
+    }
+
+    .artist-title p {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .artist-count {
+      padding: 10px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+      color: #e5e7eb;
+      font-size: 0.95rem;
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .music-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 20px;
+    }
+
+    .music-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 22px;
+      padding: 20px;
+      transition: 0.3s ease;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    }
+
+    .music-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(139, 233, 253, 0.4);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+    }
+
+    .music-cover {
+      width: 100%;
+      height: 160px;
+      border-radius: 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.15), transparent 30%),
+        linear-gradient(135deg, #1d4ed8, #7c3aed, #ec4899);
+    }
+
+    .music-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .music-card .desc {
+      font-size: 0.93rem;
+      color: #cbd5e1;
+      margin-bottom: 14px;
+      line-height: 1.5;
+      min-height: 42px;
+    }
+
+    audio {
+      width: 100%;
+      border-radius: 12px;
+      margin-top: 6px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 35px 20px 50px;
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .note {
+      margin-top: 12px;
+      font-size: 0.88rem;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 768px) {
+      .artist-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .artist-title h2 {
+        font-size: 1.5rem;
+      }
+
+      .music-cover {
+        height: 140px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge">Banco de Músicas Autorais</div>
+    <h1>Acervo Musical</h1>
+    <p class="subtitle">
+      Uma página criada para reunir, organizar e reproduzir músicas autorais de forma elegante,
+      moderna e prática. Escolha o artista e escute as faixas diretamente na página.
+    </p>
+
+    <div class="top-buttons">
+      <a href="#daniel">Daniel</a>
+      <a href="#thiago">Thiago</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- DANIEL -->
+    <section class="artist-section" id="daniel">
+      <div class="artist-box">
+        <div class="artist-header">
+          <div class="artist-title">
+            <div class="artist-icon">🎤</div>
+            <div>
+              <h2>Daniel</h2>
+              <p>Músicas autorais do artista Daniel</p>
+            </div>
+          </div>
+          <div class="artist-count">Faixas disponíveis: 2</div>
+        </div>
+
+        <div class="music-grid">
+          <div class="music-card">
+            <div class="music-cover">🎵</div>
+            <h3>Nome da Música 1</h3>
+            <p class="desc">Descrição opcional da faixa, estilo, inspiração ou observação.</p>
+            <audio controls>
+              <source src="musicas/daniel/musica1.mp3" type="audio/mpeg">
+              Seu navegador não suporta áudio.
+            </audio>
+          </div>
+
+          <div class="music-card">
+            <div class="music-cover">🎶</div>
+            <h3>Nome da Música 2</h3>
+            <p class="desc">Descrição opcional da faixa, estilo, inspiração ou observação.</p>
+            <audio controls>
+              <source src="musicas/daniel/musica2.mp3" type="audio/mpeg">
+              Seu navegador não suporta áudio.
+            </audio>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THIAGO -->
+    <section class="artist-section" id="thiago">
+      <div class="artist-box">
+        <div class="artist-header">
+          <div class="artist-title">
+            <div class="artist-icon">🎧</div>
+            <div>
+              <h2>Thiago</h2>
+              <p>Músicas autorais do artista Thiago</p>
+            </div>
+          </div>
+          <div class="artist-count">Faixas disponíveis: 2</div>
+        </div>
+
+        <div class="music-grid">
+          <div class="music-card">
+            <div class="music-cover">🎼</div>
+            <h3>Nome da Música 1</h3>
+            <p class="desc">Descrição opcional da faixa, estilo, inspiração ou observação.</p>
+            <audio controls>
+              <source src="musicas/thiago/musica1.mp3" type="audio/mpeg">
+              Seu navegador não suporta áudio.
+            </audio>
+          </div>
+
+          <div class="music-card">
+            <div class="music-cover">🔥</div>
+            <h3>Nome da Música 2</h3>
+            <p class="desc">Descrição opcional da faixa, estilo, inspiração ou observação.</p>
+            <audio controls>
+              <source src="musicas/thiago/musica2.mp3" type="audio/mpeg">
+              Seu navegador não suporta áudio.
+            </audio>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Projeto musical autoral • Página desenvolvida para reprodução de faixas em MP3</p>
+    <p class="note">Basta substituir os nomes das músicas e os caminhos dos arquivos MP3 conforme sua pasta no GitHub.</p>
+  </footer>
+
+</body>
+</html>
